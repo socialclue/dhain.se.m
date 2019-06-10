@@ -1,6 +1,19 @@
 
 
-# Steve's Fish Emporium - An Ionic 4 application using React
+# Dhain Se Mobile Collector / Incentive Compatible User Travel Data.
+
+
+## Todo
+
+1. Collect user information such as Connection, Map Coordinate,
+2. Collect user basic info like name
+3. Collect travel info like from to and current
+4. Collect experience type
+5. Collect trip type
+6. Collect how to's
+7. Collect money spent
+8. Collect photograph
+
 
 
 ## Available Scripts
@@ -41,5 +54,3 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-
-

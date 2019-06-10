@@ -68,16 +68,14 @@ class About extends Component<Props, State> {
                         <img src="assets/img/fishlogo.png" alt="Steve's Fish Emporium"/>
                     </div>
                     <div className="ion-padding about-info">
-                        <h4>Steve's Fish Emporium</h4>
+                        <h4>Dhain Se, Lets go</h4>
 
                         <p>
-                            We are specialists in Freshwater Tropical and Tropical Marine. We are also suppliers of pond products, aquariums and viviariums.
+                            Mark meta data where ever you go and trade ,for real money.
                             <br/> <br/>
-                            We are one of the largest aquatic emporiums in London, and we pride our selves in 1 to 1 service and try to give the best possible advice to each customer
-                            from beginner to experienced. We will always give a warm and friendly welcome to anyone who walks through the door!
+                            Collect your metadata by just filling a some basic info, and we do the rest, pay the fees, get your data listed.
                             <br/> <br/>
-                            Please come to one of our branches to view our vast array of tropical and marine livestock.
-                            We house a large selection of tropical and marine fish including a large selection of corals and invertebrates and freshwater fish.
+                            Economic explained here.
                         </p>
                     </div>
                 </IonContent>
