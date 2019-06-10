@@ -4,8 +4,8 @@ import { RootState, selectors, actions } from '../store';
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import { withRouter, RouteComponentProps } from "react-router";
-import { IonModal, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
-    IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert } from '@ionic/react';
+import { IonTextarea, IonRadioGroup, IonRadio, IonItem, IonLabel , IonList, IonListHeader, IonSelect, IonSelectOption, IonModal, IonInput, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
+    IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert, IonText } from '@ionic/react';
 import './FishesPage.css';
 
 
@@ -16,7 +16,12 @@ type State = {
   isRefreshing: boolean,
   showLoading: boolean,
   showFilterModal: boolean,
-  loadingMessage: string
+  loadingMessage: string,
+  showModal: boolean,
+  rating: boolean,
+  feedback: boolean,
+  remarks: boolean,
+
 }
 
 class FishesPage extends Component<Props, State> {
@@ -27,7 +32,11 @@ class FishesPage extends Component<Props, State> {
     isRefreshing: false,
     showLoading: false,
     showFilterModal: false,
-    loadingMessage: ''
+    loadingMessage: '',
+    showModal: false,
+    rating: false,
+    feedback: false,
+    remarks: false,
   }
 
   constructor(props: Props) {
@@ -140,6 +149,104 @@ class FishesPage extends Component<Props, State> {
         </IonContent>
 
         <IonModal
+        isOpen={this.state.showModal}
+        onDidDismiss={() => this.setState(() => ({ showModal: false }))}>
+          <IonText color="primary" text-center>
+          <h2>Add details</h2>
+        </IonText>
+          <IonItem text-center>
+            <IonLabel position="fixed">Name</IonLabel>
+            <IonInput  placeholder="Enter Your Name"></IonInput>
+          </IonItem>
+
+            <IonList>
+             <IonRadioGroup>
+               <IonListHeader>
+                 <IonLabel>Select Review</IonLabel>
+               </IonListHeader>
+
+               <IonItem>
+                 <IonLabel>Rating</IonLabel>
+                 <IonRadio slot="start" value="" onClick={()=>{this.setState({rating:true, feedback:false, remarks:false})}}></IonRadio>
+               </IonItem>
+
+               <IonItem>
+                 <IonLabel>Feedback</IonLabel>
+                 <IonRadio slot="start" value="Feedback" onClick={()=>{this.setState({feedback:true, rating:false, remarks:false})}}></IonRadio>
+               </IonItem>
+
+               <IonItem>
+                 <IonLabel>Remarks : </IonLabel>
+                 <IonRadio slot="start" value="Remarks" onClick={()=>{this.setState({remarks:true, feedback:false, rating:false,})}}></IonRadio>
+               </IonItem>
+             </IonRadioGroup>
+           </IonList>
+
+           {this.state.rating? <IonList>
+            <IonRadioGroup>
+              <IonListHeader>
+                <IonLabel>Rating</IonLabel>
+              </IonListHeader>
+
+              <IonItem>
+                <IonLabel>1</IonLabel>
+                <IonRadio slot="start" value="1" checked></IonRadio>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel>2</IonLabel>
+                <IonRadio slot="start" value="2"></IonRadio>
+              </IonItem>
+
+              <IonItem>
+                <IonLabel>3</IonLabel>
+                <IonRadio slot="start" value="3"></IonRadio>
+              </IonItem>
+              <IonItem>
+                <IonLabel>4</IonLabel>
+                <IonRadio slot="start" value="4"></IonRadio>
+              </IonItem>
+              <IonItem>
+                <IonLabel>5</IonLabel>
+                <IonRadio slot="start" value="5"></IonRadio>
+              </IonItem>
+            </IonRadioGroup>
+          </IonList>:''}
+
+          {this.state.feedback? <IonList>
+           <IonRadioGroup>
+             <IonListHeader>
+               <IonLabel>Rating</IonLabel>
+             </IonListHeader>
+
+             <IonItem>
+               <IonLabel>Good</IonLabel>
+               <IonRadio slot="start" value="Good" checked></IonRadio>
+             </IonItem>
+
+             <IonItem>
+               <IonLabel>Better</IonLabel>
+               <IonRadio slot="start" value="Better"></IonRadio>
+             </IonItem>
+
+             <IonItem>
+               <IonLabel>Best</IonLabel>
+               <IonRadio slot="start" value="Best"></IonRadio>
+             </IonItem>
+           </IonRadioGroup>
+         </IonList>:''}
+
+         {this.state.remarks? <IonItem>
+          <IonLabel>Remarks</IonLabel>
+          <IonTextarea clearOnEdit={true}></IonTextarea>
+        </IonItem>:''}
+
+          <IonButton onClick={() => this.setState(() => ({ showModal: false }))}>
+            Submit
+          </IonButton>
+        </IonModal>
+
+        <IonModal
           isOpen={this.state.showFilterModal}
           onDidDismiss={() => this.setState(() => ({ showFilterModal: false}))}
         >
@@ -158,20 +265,9 @@ class FishesPage extends Component<Props, State> {
           onDidDismiss={() => this.setState(() => ({ 'showLoading': false }))}
         />
         <IonFab ref={this.ionFabRef} slot="fixed" vertical="bottom" horizontal="end">
-          <IonFabButton>
-            <IonIcon name="share"></IonIcon>
+          <IonFabButton  onClick={() => {this.setState({showModal:true})}}>
+            <IonIcon name="add"></IonIcon>
           </IonFabButton>
-          <IonFabList side="top">
-            <IonFabButton color="vimeo" onClick={() => this.openSocial('Vimeo')}>
-              <IonIcon name="logo-vimeo"></IonIcon>
-            </IonFabButton>
-            <IonFabButton color="twitter" onClick={() => this.openSocial('Twitter')}>
-              <IonIcon name="logo-twitter"></IonIcon>
-            </IonFabButton>
-            <IonFabButton color="facebook" onClick={() => this.openSocial('Facebook')}>
-              <IonIcon name="logo-facebook"></IonIcon>
-            </IonFabButton>
-          </IonFabList>
         </IonFab>
       </>
     );
