@@ -4,8 +4,8 @@ import { RootState, selectors, actions } from '../store';
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import { withRouter, RouteComponentProps } from "react-router";
-import { IonModal, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
-    IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert } from '@ionic/react';
+import { IonModal, IonItem, IonLabel, IonInput, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
+    IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert, IonText } from '@ionic/react';
 import './FishesPage.css';
 
 
@@ -16,7 +16,8 @@ type State = {
   isRefreshing: boolean,
   showLoading: boolean,
   showFilterModal: boolean,
-  loadingMessage: string
+  loadingMessage: string,
+  showModal: boolean
 }
 
 class FishesPage extends Component<Props, State> {
@@ -27,7 +28,8 @@ class FishesPage extends Component<Props, State> {
     isRefreshing: false,
     showLoading: false,
     showFilterModal: false,
-    loadingMessage: ''
+    loadingMessage: '',
+    showModal: false
   }
 
   constructor(props: Props) {
@@ -140,6 +142,21 @@ class FishesPage extends Component<Props, State> {
         </IonContent>
 
         <IonModal
+        isOpen={this.state.showModal}
+        onDidDismiss={() => this.setState(() => ({ showModal: false }))}>
+          <IonText color="primary" text-center>
+          <h2>Add details</h2>
+        </IonText>
+          <IonItem text-center>
+            <IonLabel position="fixed">Name</IonLabel>
+            <IonInput  placeholder="Enter Your Name"></IonInput>
+          </IonItem>
+          <IonButton onClick={() => this.setState(() => ({ showModal: false }))}>
+            Submit
+          </IonButton>
+        </IonModal>
+
+        <IonModal
           isOpen={this.state.showFilterModal}
           onDidDismiss={() => this.setState(() => ({ showFilterModal: false}))}
         >
@@ -158,20 +175,9 @@ class FishesPage extends Component<Props, State> {
           onDidDismiss={() => this.setState(() => ({ 'showLoading': false }))}
         />
         <IonFab ref={this.ionFabRef} slot="fixed" vertical="bottom" horizontal="end">
-          <IonFabButton>
-            <IonIcon name="share"></IonIcon>
+          <IonFabButton  onClick={() => {this.setState({showModal:true})}}>
+            <IonIcon name="add"></IonIcon>
           </IonFabButton>
-          <IonFabList side="top">
-            <IonFabButton color="vimeo" onClick={() => this.openSocial('Vimeo')}>
-              <IonIcon name="logo-vimeo"></IonIcon>
-            </IonFabButton>
-            <IonFabButton color="twitter" onClick={() => this.openSocial('Twitter')}>
-              <IonIcon name="logo-twitter"></IonIcon>
-            </IonFabButton>
-            <IonFabButton color="facebook" onClick={() => this.openSocial('Facebook')}>
-              <IonIcon name="logo-facebook"></IonIcon>
-            </IonFabButton>
-          </IonFabList>
         </IonFab>
       </>
     );
