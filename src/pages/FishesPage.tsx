@@ -21,6 +21,9 @@ type State = {
   rating: boolean,
   feedback: boolean,
   remarks: boolean,
+  ratingValue: string,
+  feedbackValue: string,
+  remarksValue: string,
 
 }
 
@@ -37,6 +40,9 @@ class FishesPage extends Component<Props, State> {
     rating: false,
     feedback: false,
     remarks: false,
+    ratingValue: '',
+    feedbackValue: '',
+    remarksValue: '',
   }
 
   constructor(props: Props) {
@@ -88,6 +94,10 @@ class FishesPage extends Component<Props, State> {
         this.ionRefresherRef.current.complete();
       }
     }, 500);
+  }
+
+  componentDidMount(){
+    console.log('==>>>',this.state.ratingValue);
   }
 
   render() {
@@ -167,7 +177,7 @@ class FishesPage extends Component<Props, State> {
 
                <IonItem>
                  <IonLabel>Rating</IonLabel>
-                 <IonRadio slot="start" value="" onClick={()=>{this.setState({rating:true, feedback:false, remarks:false})}}></IonRadio>
+                 <IonRadio slot="start" value="Rating" onClick={()=>{this.setState({rating:true, feedback:false, remarks:false})}}></IonRadio>
                </IonItem>
 
                <IonItem>
@@ -190,25 +200,25 @@ class FishesPage extends Component<Props, State> {
 
               <IonItem>
                 <IonLabel>1</IonLabel>
-                <IonRadio slot="start" value="1" checked></IonRadio>
+                <IonRadio slot="start" value="1" onChange={(e)=>{this.setState({ratingValue:'1'})}}></IonRadio>
               </IonItem>
 
               <IonItem>
                 <IonLabel>2</IonLabel>
-                <IonRadio slot="start" value="2"></IonRadio>
+                <IonRadio slot="start" value="2" onChange={(e)=>{this.setState({ratingValue:'2'})}}></IonRadio>
               </IonItem>
 
               <IonItem>
                 <IonLabel>3</IonLabel>
-                <IonRadio slot="start" value="3"></IonRadio>
+                <IonRadio slot="start" value="3" onChange={(e)=>{this.setState({ratingValue:'3'})}}></IonRadio>
               </IonItem>
               <IonItem>
                 <IonLabel>4</IonLabel>
-                <IonRadio slot="start" value="4"></IonRadio>
+                <IonRadio slot="start" value="4" onChange={(e)=>{this.setState({ratingValue:'4'})}}></IonRadio>
               </IonItem>
               <IonItem>
                 <IonLabel>5</IonLabel>
-                <IonRadio slot="start" value="5"></IonRadio>
+                <IonRadio slot="start" value="5" onChange={(e)=>{this.setState({ratingValue:'5'})}}></IonRadio>
               </IonItem>
             </IonRadioGroup>
           </IonList>:''}
