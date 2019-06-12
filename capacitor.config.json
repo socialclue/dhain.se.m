@@ -1,7 +1,6 @@
 {
-  "appId": "io.ionic.starter",
-  "appName": "ionic-app-base",
+  "appId": "com.dhain.se",
+  "appName": "Dhain Se Lets Go",
   "bundledWebRuntime": false,
-  "webDir": "public",
-  "npmClient": "npm"
+  "webDir": "build"
 }
