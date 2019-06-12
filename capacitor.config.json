@@ -1,6 +1,7 @@
 {
-  "appId": "com.fishemporium.steves",
-  "appName": "Steve's Fish Emporium",
+  "appId": "io.ionic.starter",
+  "appName": "ionic-app-base",
   "bundledWebRuntime": false,
-  "webDir": "build"
+  "webDir": "public",
+  "npmClient": "npm"
 }
