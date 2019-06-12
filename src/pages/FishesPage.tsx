@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RootState, selectors, actions } from '../store';
+import {reactLocalStorage} from 'reactjs-localstorage';
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import { withRouter, RouteComponentProps } from "react-router";
@@ -55,6 +56,7 @@ class FishesPage extends Component<Props, State> {
 
     this.ionRefresherRef = React.createRef<HTMLIonRefresherElement>();
     this.ionFabRef = React.createRef<HTMLIonFabElement>();
+
   }
 
   presentFilter = () => {
@@ -252,10 +254,14 @@ class FishesPage extends Component<Props, State> {
         </IonItem>:''}
 
           <IonButton onClick={() => {this.setState(() => ({ showModal: false }));
-          console.log('Name : ', this.state.username);
-          console.log('Rating : ', this.state.ratingValue);
-          console.log('Feedback  : ', this.state.feedbackValue);
-          console.log('Remarks  : ', this.state.remarksValue);
+          reactLocalStorage.set('name', this.state.username);
+          reactLocalStorage.get('rating',  this.state.ratingValue);
+          reactLocalStorage.setObject('metaData', {'name': this.state.username,
+          'rating' : this.state.ratingValue,
+          'feedback' : this.state.feedbackValue,
+          'remarks'  : this.state.remarksValue
+      });
+          console.log('MetaData : ',reactLocalStorage.getObject('metaData'));
 
       } }>
             Submit
