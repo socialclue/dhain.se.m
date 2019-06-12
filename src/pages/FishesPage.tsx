@@ -98,10 +98,6 @@ class FishesPage extends Component<Props, State> {
     }, 500);
   }
 
-  componentDidMount(){
-    console.log('==>>>',this.state.ratingValue);
-  }
-
   render() {
     return (
       <>
@@ -252,13 +248,14 @@ class FishesPage extends Component<Props, State> {
 
          {this.state.remarks? <IonItem>
           <IonLabel>Remarks</IonLabel>
-          <IonTextarea clearOnEdit={true}></IonTextarea>
+          <textarea value={this.state.remarksValue} onChange={(e)=>{this.setState({remarksValue:e.target.value})}}></textarea>
         </IonItem>:''}
 
           <IonButton onClick={() => {this.setState(() => ({ showModal: false }));
+          console.log('Name : ', this.state.username);
           console.log('Rating : ', this.state.ratingValue);
-        console.log('Feedback : ', this.state.feedbackValue);
-        console.log('Name : ', this.state.username);
+          console.log('Feedback  : ', this.state.feedbackValue);
+          console.log('Remarks  : ', this.state.remarksValue);
 
       } }>
             Submit
