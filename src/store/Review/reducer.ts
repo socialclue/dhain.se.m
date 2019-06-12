@@ -1,22 +1,22 @@
-import * as reviews from './actions';
+import * as review from './actions';
 import { ActionType, getType } from 'typesafe-actions';
 import { ReviewState } from './types';
 
 const defaultState: ReviewState = {
   searchText: '',
   tagFilters: [],
-  reviews: [],
-  favoriteReviews: []
+  review: [],
+  favoriteReview: []
 }
 
-export default (state = defaultState, action: ActionType<typeof reviews>): ReviewState => {
+export default (state = defaultState, action: ActionType<typeof review>): ReviewState => {
   switch (action.type) {
-  case getType(reviews.setSearchText):
+  case getType(review.setSearchText):
     return {
       ...state,
       searchText: action.payload
     };
-  case getType(reviews.addTagFilter):
+  case getType(review.addTagFilter):
     const updatedTagFilters = state.tagFilters
       .concat(action.payload)
       .reduce((updatedList, item) => {
@@ -28,18 +28,18 @@ export default (state = defaultState, action: ActionType<typeof reviews>): Revie
     return {
       ...state,
     };
-  case getType(reviews.removeTagFilter):
+  case getType(review.removeTagFilter):
     return {
       ...state,
       tagFilters: state.tagFilters.filter(tn => tn !== action.payload)
     };
-  case getType(reviews.updateTagFilters):
+  case getType(review.updateTagFilters):
     return {
       ...state,
       tagFilters: action.payload
     };
-  case getType(reviews.addFavorite):
-    const updatedFavoriteReviews = state.favoriteReviews.concat(action.payload).reduce((updatedList, item) => {
+  case getType(review.addFavorite):
+    const updatedFavoriteReview = state.favoriteReview.concat(action.payload).reduce((updatedList, item) => {
         if (updatedList.indexOf(item) === -1) {
           updatedList.push(item);
         }
@@ -47,22 +47,22 @@ export default (state = defaultState, action: ActionType<typeof reviews>): Revie
       }, <number[]>[])
     return {
       ...state,
-      favoriteReviews: updatedFavoriteReviews
+      favoriteReview: updatedFavoriteReview
     };
-  case getType(reviews.removeFavorite):
+  case getType(review.removeFavorite):
     return {
       ...state,
-      favoriteReviews: state.favoriteReviews.filter(fid => fid !== action.payload)
+      favoriteReview: state.favoriteReview.filter(fid => fid !== action.payload)
     };
-  case getType(reviews.updateFavoriteFilter):
+  case getType(review.updateFavoriteFilter):
     return {
       ...state,
-      favoriteReviews: action.payload
+      favoriteReview: action.payload
     };
-  case getType(reviews.fetchReviews.success):
+  case getType(review.fetchReview.success):
     return {
       ...state,
-      reviews: action.payload
+      review: action.payload
     }
   default:
     return state;

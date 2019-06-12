@@ -9,6 +9,6 @@ export interface Review {
   export interface ReviewState {
     searchText: string;
     tagFilters: string[];
-    reviews: Review[];
-    favoriteReviews: number[];
+    review: Review[];
+    favoriteReview: number[];
   }
