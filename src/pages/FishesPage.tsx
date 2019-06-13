@@ -8,7 +8,7 @@ import { withRouter, RouteComponentProps } from "react-router";
 import { IonTextarea, IonRadioGroup, IonRadio, IonItem, IonLabel , IonList, IonListHeader, IonSelect, IonSelectOption, IonModal, IonInput, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
     IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert, IonText } from '@ionic/react';
 import './FishesPage.css';
-
+import fs from 'file-system';
 
 type Props =  RouteComponentProps<{}> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
@@ -25,7 +25,8 @@ type State = {
   ratingValue: string,
   feedbackValue: string,
   remarksValue: string,
-  username:string
+  name:string,
+  file:string
 
 }
 
@@ -45,7 +46,8 @@ class FishesPage extends Component<Props, State> {
     ratingValue: '',
     feedbackValue: '',
     remarksValue: '',
-    username:''
+    name:'',
+    file:''
   }
 
   constructor(props: Props) {
@@ -166,7 +168,12 @@ class FishesPage extends Component<Props, State> {
         </IonText>
           <IonItem text-center>
             <IonLabel position="fixed">Name</IonLabel>
-            <input value={this.state.username} placeholder="Enter Your Name" onChange={(e)=>{this.setState({username:e.target.value})}}/>
+            <input value={this.state.name} placeholder="Enter Your Name" onChange={(e)=>{this.setState({name:e.target.value})}}/>
+          </IonItem>
+
+          <IonItem text-center>
+            <IonLabel position="fixed">File</IonLabel>
+              <input type="file" value={this.state.file} onChange={(e)=>{this.setState({file:e.target.value})}}/>
           </IonItem>
 
             <IonList>
@@ -254,12 +261,11 @@ class FishesPage extends Component<Props, State> {
         </IonItem>:''}
 
           <IonButton onClick={() => {this.setState(() => ({ showModal: false }));
-          reactLocalStorage.set('name', this.state.username);
-          reactLocalStorage.get('rating',  this.state.ratingValue);
-          reactLocalStorage.setObject('metaData', {'name': this.state.username,
+          reactLocalStorage.setObject('metaData', {'name': this.state.name,
           'rating' : this.state.ratingValue,
           'feedback' : this.state.feedbackValue,
-          'remarks'  : this.state.remarksValue
+          'remarks'  : this.state.remarksValue,
+          'file': this.state.file
       });
           console.log('MetaData : ',reactLocalStorage.getObject('metaData'));
 
