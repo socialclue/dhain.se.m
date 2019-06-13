@@ -1,0 +1,7 @@
+{
+  "name": "My React App",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

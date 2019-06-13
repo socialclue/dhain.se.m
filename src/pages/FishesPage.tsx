@@ -84,6 +84,7 @@ class FishesPage extends Component<Props, State> {
     }
   }
 
+
   updateSegment = (e: CustomEvent) => {
     this.setState((prevState) => ({
       ...prevState,
@@ -161,6 +162,9 @@ class FishesPage extends Component<Props, State> {
         <IonModal
         isOpen={this.state.showModal}
         onDidDismiss={() => this.setState(() => ({ showModal: false }))}>
+        <IonButton onClick={() => this.setState(() => ({ showModal: false }))}>
+          Close Modal
+        </IonButton>
           <IonText color="primary" text-center>
           <h2>Add details</h2>
         </IonText>

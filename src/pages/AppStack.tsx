@@ -33,11 +33,11 @@ const AppStack: React.FC = () => (
       <IonTabBar slot="bottom">
         <IonTabButton tab="fishes" href="/fishes">
           <IonIcon name="sunny" />
-          <IonLabel>Our Fish</IonLabel>
+          <IonLabel>Experiences</IonLabel>
         </IonTabButton>
         <IonTabButton tab="branches" href="/branches">
           <IonIcon name="planet" />
-          <IonLabel>Branches</IonLabel>
+          <IonLabel>Share</IonLabel>
         </IonTabButton>
         <IonTabButton tab="map" href="/map">
           <IonIcon name="map" />
