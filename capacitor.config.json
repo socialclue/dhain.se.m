@@ -1,6 +1,7 @@
 {
-  "appId": "com.fishemporium.steves",
-  "appName": "Steve's Fish Emporium",
+  "appId": "com.dhain.se",
+  "appName": "Tru explore App",
   "bundledWebRuntime": false,
-  "webDir": "build"
+  "webDir": "build",
+  "npmClient": "npm"
 }

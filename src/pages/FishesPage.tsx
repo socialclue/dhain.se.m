@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RootState, selectors, actions } from '../store';
+import {reactLocalStorage} from 'reactjs-localstorage';
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import { withRouter, RouteComponentProps } from "react-router";
 import { IonTextarea, IonRadioGroup, IonRadio, IonItem, IonLabel , IonList, IonListHeader, IonSelect, IonSelectOption, IonModal, IonInput, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
     IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert, IonText } from '@ionic/react';
 import './FishesPage.css';
-
+import fs from 'file-system';
 
 type Props =  RouteComponentProps<{}> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
@@ -21,6 +22,11 @@ type State = {
   rating: boolean,
   feedback: boolean,
   remarks: boolean,
+  ratingValue: string,
+  feedbackValue: string,
+  remarksValue: string,
+  name:string,
+  file:string
 
 }
 
@@ -37,6 +43,11 @@ class FishesPage extends Component<Props, State> {
     rating: false,
     feedback: false,
     remarks: false,
+    ratingValue: '',
+    feedbackValue: '',
+    remarksValue: '',
+    name:'',
+    file:''
   }
 
   constructor(props: Props) {
@@ -47,6 +58,7 @@ class FishesPage extends Component<Props, State> {
 
     this.ionRefresherRef = React.createRef<HTMLIonRefresherElement>();
     this.ionFabRef = React.createRef<HTMLIonFabElement>();
+
   }
 
   presentFilter = () => {
@@ -73,6 +85,7 @@ class FishesPage extends Component<Props, State> {
       this.ionFabRef.current.close();
     }
   }
+
 
   updateSegment = (e: CustomEvent) => {
     this.setState((prevState) => ({
@@ -151,12 +164,20 @@ class FishesPage extends Component<Props, State> {
         <IonModal
         isOpen={this.state.showModal}
         onDidDismiss={() => this.setState(() => ({ showModal: false }))}>
+        <IonButton onClick={() => this.setState(() => ({ showModal: false }))}>
+          Close Modal
+        </IonButton>
           <IonText color="primary" text-center>
           <h2>Add details</h2>
         </IonText>
           <IonItem text-center>
             <IonLabel position="fixed">Name</IonLabel>
-            <IonInput  placeholder="Enter Your Name"></IonInput>
+            <input value={this.state.name} placeholder="Enter Your Name" onChange={(e)=>{this.setState({name:e.target.value})}}/>
+          </IonItem>
+
+          <IonItem text-center>
+            <IonLabel position="fixed">File</IonLabel>
+              <input type="file" value='' onChange={(e)=>{this.setState({file:e.target.value});  console.log('FILES : ', e.target.files );}}/>
           </IonItem>
 
             <IonList>
@@ -167,7 +188,7 @@ class FishesPage extends Component<Props, State> {
 
                <IonItem>
                  <IonLabel>Rating</IonLabel>
-                 <IonRadio slot="start" value="" onClick={()=>{this.setState({rating:true, feedback:false, remarks:false})}}></IonRadio>
+                 <IonRadio slot="start" value="Rating" onClick={()=>{this.setState({rating:true, feedback:false, remarks:false})}}></IonRadio>
                </IonItem>
 
                <IonItem>
@@ -182,66 +203,77 @@ class FishesPage extends Component<Props, State> {
              </IonRadioGroup>
            </IonList>
 
-           {this.state.rating? <IonList>
-            <IonRadioGroup>
-              <IonListHeader>
-                <IonLabel>Rating</IonLabel>
-              </IonListHeader>
+           {this.state.rating?     <IonList>
+                <IonRadioGroup>
+                  <IonListHeader>
+                    <IonLabel>Select Rating</IonLabel>
+                  </IonListHeader>
 
-              <IonItem>
-                <IonLabel>1</IonLabel>
-                <IonRadio slot="start" value="1" checked></IonRadio>
-              </IonItem>
+                  <IonItem>
+                    <IonLabel>1</IonLabel>
+                    <IonRadio slot="start" value="1" onClick={()=>{this.setState({ratingValue:'1'})}}></IonRadio>
+                  </IonItem>
 
-              <IonItem>
-                <IonLabel>2</IonLabel>
-                <IonRadio slot="start" value="2"></IonRadio>
-              </IonItem>
+                  <IonItem>
+                    <IonLabel>2</IonLabel>
+                    <IonRadio slot="start" value="2" onClick={()=>{this.setState({ratingValue:'2'})}}></IonRadio>
+                  </IonItem>
 
-              <IonItem>
-                <IonLabel>3</IonLabel>
-                <IonRadio slot="start" value="3"></IonRadio>
-              </IonItem>
-              <IonItem>
-                <IonLabel>4</IonLabel>
-                <IonRadio slot="start" value="4"></IonRadio>
-              </IonItem>
-              <IonItem>
-                <IonLabel>5</IonLabel>
-                <IonRadio slot="start" value="5"></IonRadio>
-              </IonItem>
-            </IonRadioGroup>
-          </IonList>:''}
+                  <IonItem>
+                    <IonLabel>3</IonLabel>
+                    <IonRadio slot="start" value="3" onClick={()=>{this.setState({ratingValue:'3'})}}></IonRadio>
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel>4</IonLabel>
+                    <IonRadio slot="start" value="3" onClick={()=>{this.setState({ratingValue:'4'})}}></IonRadio>
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel>5</IonLabel>
+                    <IonRadio slot="start" value="5" onClick={()=>{this.setState({ratingValue:'5'})}}></IonRadio>
+                  </IonItem>
+                </IonRadioGroup>
+              </IonList>:''}
 
           {this.state.feedback? <IonList>
-           <IonRadioGroup>
-             <IonListHeader>
-               <IonLabel>Rating</IonLabel>
-             </IonListHeader>
+               <IonRadioGroup>
+                 <IonListHeader>
+                   <IonLabel>Select Feedback</IonLabel>
+                 </IonListHeader>
 
-             <IonItem>
-               <IonLabel>Good</IonLabel>
-               <IonRadio slot="start" value="Good" checked></IonRadio>
-             </IonItem>
+                 <IonItem>
+                   <IonLabel>Good</IonLabel>
+                   <IonRadio slot="start" value="Good" onClick={()=>{this.setState({feedbackValue:'Good'})}}></IonRadio>
+                 </IonItem>
 
-             <IonItem>
-               <IonLabel>Better</IonLabel>
-               <IonRadio slot="start" value="Better"></IonRadio>
-             </IonItem>
+                 <IonItem>
+                   <IonLabel>Better</IonLabel>
+                   <IonRadio slot="start" value="Better" onClick={()=>{this.setState({feedbackValue:'Better'})}}></IonRadio>
+                 </IonItem>
 
-             <IonItem>
-               <IonLabel>Best</IonLabel>
-               <IonRadio slot="start" value="Best"></IonRadio>
-             </IonItem>
-           </IonRadioGroup>
-         </IonList>:''}
+                 <IonItem>
+                   <IonLabel>Best</IonLabel>
+                   <IonRadio slot="start" value="Best" onClick={()=>{this.setState({feedbackValue:'Best'})}}></IonRadio>
+                 </IonItem>
+               </IonRadioGroup>
+             </IonList>:''}
 
          {this.state.remarks? <IonItem>
           <IonLabel>Remarks</IonLabel>
-          <IonTextarea clearOnEdit={true}></IonTextarea>
+          <textarea value={this.state.remarksValue} onChange={(e)=>{this.setState({remarksValue:e.target.value})}}></textarea>
         </IonItem>:''}
 
-          <IonButton onClick={() => this.setState(() => ({ showModal: false }))}>
+          <IonButton onClick={() => {this.setState(() => ({ showModal: false }));
+          reactLocalStorage.setObject('metaData', {'name': this.state.name,
+          'rating' : this.state.ratingValue,
+          'feedback' : this.state.feedbackValue,
+          'remarks'  : this.state.remarksValue,
+          'file': this.state.file
+      });
+          console.log('MetaData : ',reactLocalStorage.getObject('metaData'));
+
+      } }>
             Submit
           </IonButton>
         </IonModal>
