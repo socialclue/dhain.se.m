@@ -173,7 +173,7 @@ class FishesPage extends Component<Props, State> {
 
           <IonItem text-center>
             <IonLabel position="fixed">File</IonLabel>
-              <input type="file" value={this.state.file} onChange={(e)=>{this.setState({file:e.target.value})}}/>
+              <input type="file" value='' onChange={(e)=>{this.setState({file:e.target.value});  console.log('FILES : ', e.target.files );}}/>
           </IonItem>
 
             <IonList>
