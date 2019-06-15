@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RootState, selectors, actions } from '../store';
-import {reactLocalStorage} from 'reactjs-localstorage';
+import iStorage from "istorage";
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import { withRouter, RouteComponentProps } from "react-router";
 import { IonTextarea, IonRadioGroup, IonRadio, IonItem, IonLabel , IonList, IonListHeader, IonSelect, IonSelectOption, IonModal, IonInput, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
     IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert, IonText } from '@ionic/react';
 import './FishesPage.css';
-import fs from 'file-system';
 
 type Props =  RouteComponentProps<{}> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
@@ -265,13 +264,15 @@ class FishesPage extends Component<Props, State> {
         </IonItem>:''}
 
           <IonButton onClick={() => {this.setState(() => ({ showModal: false }));
-          reactLocalStorage.setObject('metaData', {'name': this.state.name,
+
+          iStorage.setItem('metaData', {'name': this.state.name,
           'rating' : this.state.ratingValue,
           'feedback' : this.state.feedbackValue,
           'remarks'  : this.state.remarksValue,
           'file': this.state.file
-      });
-          console.log('MetaData : ',reactLocalStorage.getObject('metaData'));
+      })
+          console.log('========',iStorage.getItem('metaData'));
+
 
       } }>
             Submit
