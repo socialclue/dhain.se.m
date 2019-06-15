@@ -6,12 +6,7 @@
     "@capacitor/android": "^1.0.0-beta.19",
     "@capacitor/cli": "1.0.0",
     "@capacitor/core": "1.0.0",
-<<<<<<< HEAD
     "@ionic/react": "0.0.5",
-=======
-    "@capacitor/ios": "^1.0.0",
-    "@ionic/react": "0.0.6-3",
->>>>>>> dev
     "@ionic/storage": "^2.2.0",
     "@types/googlemaps": "^3.30.19",
     "@types/jest": "24.0.11",
@@ -21,7 +16,6 @@
     "@types/react-redux": "^7.0.5",
     "@types/react-router": "^4.4.5",
     "@types/react-router-dom": "^4.3.1",
-    "file-system": "^2.2.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-redux": "^6.0.1",
@@ -39,7 +33,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "ionic:build":"npm run build"
+    "ionic:build":"npm run build",
+    "run:android":"rm -rf android && ionic capacitor add android && npm run ionic:build && cp -r google-services.json android/app/ && cd android/ && ./gradlew installDebug"
   },
   "eslintConfig": {
     "extends": "react-app"
