@@ -11,6 +11,8 @@ export const updateFishes = createAction('fishes/UPDATE_FISHES', resolve =>
   () => resolve()
 );
 
+export const addMetadata = createAction('fishGoingToTrip', resolve => () =>resolve());
+
 export const setSearchText = createAction('fishes/SET_SEARCH_TEXT', resolve =>
   (searchText: string) => resolve(searchText)
 );

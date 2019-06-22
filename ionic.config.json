@@ -1,5 +1,5 @@
 {
-  "name": "My React App",
+  "name": "ionic-app-base",
   "integrations": {
     "capacitor": {}
   },

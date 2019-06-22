@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import hash from 'object-hash';
 import { RootState, selectors, actions } from '../store';
-import {reactLocalStorage} from 'reactjs-localstorage';
+import iStorage from "istorage";
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
+import {Plugins} from '@capacitor/core';
+const {Geolocation} = Plugins;
+import {Location} from '../store/locations/types';
+import {FistGoingToTrip} from '../store/fishes/types';
 import { withRouter, RouteComponentProps } from "react-router";
 import { IonTextarea, IonRadioGroup, IonRadio, IonItem, IonLabel , IonList, IonListHeader, IonSelect, IonSelectOption, IonModal, IonInput, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
     IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert, IonText } from '@ionic/react';
 import './FishesPage.css';
-import fs from 'file-system';
 
 type Props =  RouteComponentProps<{}> & typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
@@ -56,9 +60,25 @@ class FishesPage extends Component<Props, State> {
     props.updateFishes();
     props.updateBranches();
 
+
     this.ionRefresherRef = React.createRef<HTMLIonRefresherElement>();
     this.ionFabRef = React.createRef<HTMLIonFabElement>();
 
+  }
+
+getMyPosition = () => {
+      if (Geolocation) {
+
+          Geolocation.getCurrentPosition().then(coordinates => {
+
+              this.props.addLocation({
+                  id: 0,
+                  name: 'Your current location',
+                  lat: coordinates.coords.latitude,
+                  lng: coordinates.coords.longitude
+              })
+          });
+      }
   }
 
   presentFilter = () => {
@@ -265,13 +285,22 @@ class FishesPage extends Component<Props, State> {
         </IonItem>:''}
 
           <IonButton onClick={() => {this.setState(() => ({ showModal: false }));
-          reactLocalStorage.setObject('metaData', {'name': this.state.name,
+
+          let data = [{}];
+          // We get the data as Array
+          console.log(data);
+          let item =
+          {'name': this.state.name,
+          'id': hash(this.state.name + new Date()),
+          'timestamp': new Date(),
           'rating' : this.state.ratingValue,
           'feedback' : this.state.feedbackValue,
           'remarks'  : this.state.remarksValue,
-          'file': this.state.file
-      });
-          console.log('MetaData : ',reactLocalStorage.getObject('metaData'));
+          'file': this.state.file,
+          'geoLocation': this.getMyPosition()
+          };
+          iStorage.setItem('metaData', data.push(item));
+          console.log('========>>>',iStorage.getItem('metaData'));
 
       } }>
             Submit
@@ -319,7 +348,9 @@ const mapDispatchToProps = {
   updateFishes: () => actions.fishes.updateFishes(),
   updateBranches: () => actions.branches.updateBranches(),
   setSearchText: (searchText: string) => actions.fishes.setSearchText(searchText),
-  updateTrackFilters: (trackList: string[]) => actions.fishes.updateTagFilters(trackList)
+  updateTrackFilters: (trackList: string[]) => actions.fishes.updateTagFilters(trackList),
+  addLocation: (location: Location) => actions.locations.updateLocations(location)
+
 }
 
 export default connect(
