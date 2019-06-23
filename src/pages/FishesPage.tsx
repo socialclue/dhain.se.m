@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import hash from 'object-hash';
 import { RootState, selectors, actions } from '../store';
 import iStorage from "istorage";
+import {reactLocalStorage} from 'reactjs-localstorage';
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import {Plugins} from '@capacitor/core';
@@ -10,7 +11,7 @@ const {Geolocation} = Plugins;
 import {Location} from '../store/locations/types';
 import {FistGoingToTrip} from '../store/fishes/types';
 import { withRouter, RouteComponentProps } from "react-router";
-import { IonTextarea, IonRadioGroup, IonRadio, IonItem, IonLabel , IonList, IonListHeader, IonSelect, IonSelectOption, IonModal, IonInput, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
+import { IonTextarea, IonCard, IonCardContent, IonRadioGroup, IonRadio, IonItem, IonLabel , IonList, IonListHeader, IonSelect, IonSelectOption, IonModal, IonInput, IonLoading, IonToast, IonIcon, IonHeader, IonToolbar, IonButtons, IonMenuButton,
     IonSegment, IonSegmentButton, IonButton, IonSearchbar, IonContent, IonRefresher, IonRefresherContent, IonFab, IonFabList, IonFabButton, IonAlert, IonText } from '@ionic/react';
 import './FishesPage.css';
 
@@ -51,7 +52,17 @@ class FishesPage extends Component<Props, State> {
     feedbackValue: '',
     remarksValue: '',
     name:'',
-    file:''
+    file:'',
+    items:[{
+      'name': '',
+      'id':'',
+      'timestamp': '',
+      'rating' : '',
+      'feedback' : '',
+      'remarks'  : '',
+      'file': '',
+      'geoLocation':''
+    }]
   }
 
   constructor(props: Props) {
@@ -64,6 +75,16 @@ class FishesPage extends Component<Props, State> {
     this.ionRefresherRef = React.createRef<HTMLIonRefresherElement>();
     this.ionFabRef = React.createRef<HTMLIonFabElement>();
 
+    Object.keys(window.localStorage).map((item,i) => {
+      this.state.items.push(iStorage.getItem(item));
+    });
+
+  }
+
+  componentDidMount = () => {
+    Object.keys(window.localStorage).map((item,i) => {
+      this.state.items.push(iStorage.getItem(item));
+    });
   }
 
 getMyPosition = () => {
@@ -157,30 +178,17 @@ getMyPosition = () => {
           </IonToolbar>
         </IonHeader>
 
-        <IonContent>
-          <IonRefresher ref={this.ionRefresherRef} onIonRefresh={this.doRefresh}>
-            <IonRefresherContent></IonRefresherContent>
-          </IonRefresher>
-          <IonToast
-            isOpen={this.state.isRefreshing}
-            message="Updating content"
-            showCloseButton={true}
-            duration={2000}
-            onDidDismiss={() => this.setState(() => ({ 'isRefreshing': false }))}
-          ></IonToast>
-
-          <FishList
-            fishes={this.props.allFiltered}
-            listType={"all"}
-            hidden={this.state.segment === "favorites"}
-          />
-          <FishList
-            fishes={this.props.favoritesFiltered}
-            listType={"favorites"}
-            hidden={this.state.segment === "all"}
-          />
-        </IonContent>
-
+      <IonContent>
+    {this.state.items.map((item,i)=>{
+      return (
+        <IonCard key={i}>
+          <IonCardContent>
+            {item.name}
+          </IonCardContent>
+        </IonCard>
+      )
+    })}
+  </IonContent>
         <IonModal
         isOpen={this.state.showModal}
         onDidDismiss={() => this.setState(() => ({ showModal: false }))}>
@@ -286,22 +294,19 @@ getMyPosition = () => {
 
           <IonButton onClick={() => {this.setState(() => ({ showModal: false }));
 
-          let data = [{}];
           // We get the data as Array
-          console.log(data);
-          let item =
-          {'name': this.state.name,
-          'id': hash(this.state.name + new Date()),
-          'timestamp': new Date(),
-          'rating' : this.state.ratingValue,
-          'feedback' : this.state.feedbackValue,
-          'remarks'  : this.state.remarksValue,
-          'file': this.state.file,
-          'geoLocation': this.getMyPosition()
+           let id = hash(this.state.name + new Date());
+           let item = {
+            'name': this.state.name,
+            'id': hash(this.state.name + new Date()),
+            'timestamp': new Date(),
+            'rating' : this.state.ratingValue,
+            'feedback' : this.state.feedbackValue,
+            'remarks'  : this.state.remarksValue,
+            'file': this.state.file,
+            'geoLocation': this.getMyPosition()
           };
-          iStorage.setItem('metaData', data.push(item));
-          console.log('========>>>',iStorage.getItem('metaData'));
-
+          iStorage.setItem(id, item);
       } }>
             Submit
           </IonButton>
