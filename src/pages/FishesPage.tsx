@@ -75,10 +75,6 @@ class FishesPage extends Component<Props, State> {
     this.ionRefresherRef = React.createRef<HTMLIonRefresherElement>();
     this.ionFabRef = React.createRef<HTMLIonFabElement>();
 
-    Object.keys(window.localStorage).map((item,i) => {
-      this.state.items.push(iStorage.getItem(item));
-    });
-
   }
 
   componentDidMount = () => {
