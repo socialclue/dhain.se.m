@@ -4,6 +4,7 @@ import hash from 'object-hash';
 import { RootState, selectors, actions } from '../store';
 import iStorage from "istorage";
 import {reactLocalStorage} from 'reactjs-localstorage';
+import geolocation from 'geolocation';
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import {Plugins} from '@capacitor/core';
@@ -74,6 +75,11 @@ class FishesPage extends Component<Props, State> {
 
     this.ionRefresherRef = React.createRef<HTMLIonRefresherElement>();
     this.ionFabRef = React.createRef<HTMLIonFabElement>();
+
+    geolocation.getCurrentPosition(function (err, position) {
+      if (err) throw err
+      console.log(position)
+    })
 
   }
 
