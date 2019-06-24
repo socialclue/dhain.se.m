@@ -4,7 +4,7 @@ import hash from 'object-hash';
 import { RootState, selectors, actions } from '../store';
 import iStorage from "istorage";
 import {reactLocalStorage} from 'reactjs-localstorage';
-import geolocation from 'geolocation';
+// import geolocation from 'geolocation';
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import {Plugins} from '@capacitor/core';
@@ -76,10 +76,10 @@ class FishesPage extends Component<Props, State> {
     this.ionRefresherRef = React.createRef<HTMLIonRefresherElement>();
     this.ionFabRef = React.createRef<HTMLIonFabElement>();
 
-    geolocation.getCurrentPosition(function (err, position) {
-      if (err) throw err
-      console.log(position)
-    })
+    // geolocation.getCurrentPosition(function (err, position) {
+    //   if (err) throw err
+    //   console.log(position)
+    // })
 
   }
 
@@ -89,20 +89,20 @@ class FishesPage extends Component<Props, State> {
     });
   }
 
-getMyPosition = () => {
-      if (Geolocation) {
-
-          Geolocation.getCurrentPosition().then(coordinates => {
-
-              this.props.addLocation({
-                  id: 0,
-                  name: 'Your current location',
-                  lat: coordinates.coords.latitude,
-                  lng: coordinates.coords.longitude
-              })
-          });
-      }
-  }
+// getMyPosition = () => {
+//       if (Geolocation) {
+//
+//           Geolocation.getCurrentPosition().then(coordinates => {
+//
+//               this.props.addLocation({
+//                   id: 0,
+//                   name: 'Your current location',
+//                   lat: coordinates.coords.latitude,
+//                   lng: coordinates.coords.longitude
+//               })
+//           });
+//       }
+//   }
 
   presentFilter = () => {
     this.setState(() => ({
@@ -182,6 +182,7 @@ getMyPosition = () => {
 
       <IonContent>
     {this.state.items.map((item,i)=>{
+      if(i>0)
       return (
         <IonCard key={i}>
           <IonCardContent>
@@ -306,7 +307,7 @@ getMyPosition = () => {
             'feedback' : this.state.feedbackValue,
             'remarks'  : this.state.remarksValue,
             'file': this.state.file,
-            'geoLocation': this.getMyPosition()
+            // 'geoLocation': this.getMyPosition()
           };
           iStorage.setItem(id, item);
       } }>
