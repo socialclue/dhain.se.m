@@ -4,7 +4,7 @@ import hash from 'object-hash';
 import { RootState, selectors, actions } from '../store';
 import iStorage from "istorage";
 import {reactLocalStorage} from 'reactjs-localstorage';
-// import geolocation from 'geolocation';
+import geolocation from 'geolocation';
 import FishList from '../components/FishList';
 import FishListFilter from '../components/FishListFilter';
 import {Plugins} from '@capacitor/core';
@@ -32,8 +32,9 @@ type State = {
   feedbackValue: string,
   remarksValue: string,
   name:string,
-  file:string
-
+  file:string,
+  latitude:number,
+  longitude:number
 }
 
 class FishesPage extends Component<Props, State> {
@@ -62,8 +63,10 @@ class FishesPage extends Component<Props, State> {
       'feedback' : '',
       'remarks'  : '',
       'file': '',
-      'geoLocation':''
-    }]
+      'geoLocation':0
+    }],
+    latitude:0,
+    longitude:0
   }
 
   constructor(props: Props) {
@@ -71,16 +74,12 @@ class FishesPage extends Component<Props, State> {
 
     props.updateFishes();
     props.updateBranches();
+    this.getMyPosition();
+
 
 
     this.ionRefresherRef = React.createRef<HTMLIonRefresherElement>();
     this.ionFabRef = React.createRef<HTMLIonFabElement>();
-
-    // geolocation.getCurrentPosition(function (err, position) {
-    //   if (err) throw err
-    //   console.log(position)
-    // })
-
   }
 
   componentDidMount = () => {
@@ -89,20 +88,15 @@ class FishesPage extends Component<Props, State> {
     });
   }
 
-// getMyPosition = () => {
-//       if (Geolocation) {
-//
-//           Geolocation.getCurrentPosition().then(coordinates => {
-//
-//               this.props.addLocation({
-//                   id: 0,
-//                   name: 'Your current location',
-//                   lat: coordinates.coords.latitude,
-//                   lng: coordinates.coords.longitude
-//               })
-//           });
-//       }
-//   }
+getMyPosition = () => {
+      if (Geolocation) {
+
+          Geolocation.getCurrentPosition().then(coordinates => {
+            this.setState({latitude:coordinates.coords.latitude});
+            this.setState({longitude:coordinates.coords.longitude});
+          });
+      }
+  }
 
   presentFilter = () => {
     this.setState(() => ({
@@ -208,7 +202,7 @@ class FishesPage extends Component<Props, State> {
 
           <IonItem text-center>
             <IonLabel position="fixed">File</IonLabel>
-              <input type="file" value='' onChange={(e)=>{this.setState({file:e.target.value});  console.log('FILES : ', e.target.files );}}/>
+              <input type="file" value={this.state.file} onChange={(e)=>{this.setState({file:e.target.value});  console.log('FILES : ', e.target.files );}}/>
           </IonItem>
 
             <IonList>
@@ -297,8 +291,15 @@ class FishesPage extends Component<Props, State> {
 
           <IonButton onClick={() => {this.setState(() => ({ showModal: false }));
 
+
           // We get the data as Array
            let id = hash(this.state.name + new Date());
+
+           //getCurrentPosition
+           this.getMyPosition();
+
+           console.log(this.state.latitude,this.state.longitude)
+
            let item = {
             'name': this.state.name,
             'id': hash(this.state.name + new Date()),
@@ -307,7 +308,10 @@ class FishesPage extends Component<Props, State> {
             'feedback' : this.state.feedbackValue,
             'remarks'  : this.state.remarksValue,
             'file': this.state.file,
-            // 'geoLocation': this.getMyPosition()
+            'geoLocation': {
+              latitude:this.state.latitude,
+              longitude:this.state.longitude
+            }
           };
           iStorage.setItem(id, item);
       } }>
