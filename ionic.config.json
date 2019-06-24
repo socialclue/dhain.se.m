@@ -1,15 +1,7 @@
 {
-<<<<<<< HEAD
-  "name": "My React App",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "custom"
-=======
   "name": "ionic-app-base",
   "integrations": {
     "capacitor": {}
   },
   "type": "react"
->>>>>>> dev
 }
