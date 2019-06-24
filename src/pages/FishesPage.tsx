@@ -314,6 +314,7 @@ getMyPosition = () => {
             }
           };
           iStorage.setItem(id, item);
+          window.location.reload();
       } }>
             Submit
           </IonButton>
